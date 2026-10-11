@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>บันทึกเวลาเลิกงาน OT - ศูนย์ลพบุรี</title>
+    <!-- Google Font: Prompt -->
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #f7f4ef;
+            --card-bg: #ffffff;
+            --primary: #8d7b68;
+            --primary-hover: #756554;
+            --accent: #c4b5a5;
+            --text-main: #4a4238;
+            --text-muted: #8c8275;
+            --input-bg: #faf8f5;
+            --border-color: #e3ded5;
+        }
+
+        body {
+            font-family: 'Prompt', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px 15px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(141, 123, 104, 0.08);
+            margin-bottom: 25px;
+            border: 1px solid rgba(227, 222, 213, 0.6);
+        }
+
+        h2, h3 {
+            text-align: center;
+            color: var(--text-main);
+            font-weight: 600;
+            margin-top: 0;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-main);
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px 14px;
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 15px;
+            font-family: 'Prompt', sans-serif;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            background-color: #ffffff;
+            box-shadow: 0 0 0 4px rgba(141, 123, 104, 0.1);
+        }
+
+        .camera-box {
+            background: var(--input-bg);
+            border: 2px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        video, canvas, img.preview {
+            width: 100%;
+            max-height: 300px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: none;
+        }
+
+        .btn-camera {
+            background-color: var(--accent);
+            color: var(--text-main);
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-family: 'Prompt', sans-serif;
+            margin: 5px 2px;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .btn-camera:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        button.submit-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Prompt', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(141, 123, 104, 0.2);
+            margin-top: 10px;
+        }
+
+        button.submit-btn:hover {
+            background-color: var(--primary-hover);
+        }
+
+        #status {
+            text-align: center;
+            margin-top: 15px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        /* ตารางประวัติ */
+        .history-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(141, 123, 104, 0.08);
+            border: 1px solid rgba(227, 222, 213, 0.6);
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 10px 8px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        th {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        tr:not(:last-child) td {
+            border-bottom: 1px solid var(--bg-color);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="card">
+        <h2>⏱️ บันทึกเวลาเลิกงาน OT (ศูนย์ลพบุรี)</h2>
+        <form id="otForm">
+            <!-- วันที่เลิกดึก -->
+            <div class="form-group">
+                <label for="workDate">วันที่เลิกดึก</label>
+                <input type="date" id="workDate" required>
+            </div>
+
+            <!-- ชื่อ-นามสกุล -->
+            <div class="form-group">
+                <label for="fullName">ชื่อ-นามสกุล (ไม่ต้องมีคำนำหน้า)</label>
+                <input type="text" id="fullName" placeholder="เช่น สมชาย ใจดี" required>
+            </div>
+
+            <!-- ทีม -->
+            <div class="form-group">
+                <label for="team">ทีม</label>
+                <select id="team" required>
+                    <option value="">-- เลือกทีมของคุณ --</option>
+                    <option value="CM นอกเมืองลพบุรี">CM นอกเมืองลพบุรี</option>
+                    <option value="CM ในเมืองลพบุรี">CM ในเมืองลพบุรี</option>
+                    <option value="CM สิงห์บุรี">CM สิงห์บุรี</option>
+                    <option value="CM อ่างทอง">CM อ่างทอง</option>
+                    <option value="CM สระบุรี">CM สระบุรี</option>
+                    <option value="PM ทีมพี่ฟลุ๊ค">PM ทีมพี่ฟลุ๊ค</option>
+                    <option value="PM ทีมพี่เป้า">PM ทีมพี่เป้า</option>
+                    <option value="PM ทีมพี่บัญชา">PM ทีมพี่บัญชา</option>
+                    <option value="ลูกค้านอก">ลูกค้านอก</option>
+                    <option value="กาแฟ">กาแฟ</option>
+                    <option value="อื่นๆ">อื่นๆ</option>
+                </select>
+            </div>
+
+            <!-- ถ่ายรูป Timestamp และเวลาเลิกงานอัตโนมัติ -->
+            <div class="form-group">
+                <label>รูปถ่ายเซลฟี่ Time Stamp หน้าสาขา</label>
+                <div class="camera-box">
+                    <button type="button" class="btn-camera" id="startCamBtn">📷 เปิดกล้องถ่ายทันที</button>
+                    <input type="file" id="uploadFile" accept="image/*" style="display: none;">
+                    <button type="button" class="btn-camera" onclick="document.getElementById('uploadFile').click()">📁 อัปโหลดรูปภาพ</button>
+                    
+                    <video id="video" autoplay playsinline></video>
+                    <button type="button" class="btn-camera" id="captureBtn" style="display:none; background-color: #8d7b68; color:white; width:100%; margin-top:10px;">📸 กดถ่ายภาพตอนนี้</button>
+                    
+                    <canvas id="canvas"></canvas>
+                    <img id="previewImg" class="preview" alt="Preview">
+                </div>
+            </div>
+
+            <!-- เวลาเลิกงาน (ดึงอัตโนมัติหรือเลือกเอง) -->
+            <div class="form-group">
+                <label for="endTime">เวลาเลิกงาน (ตามรูป Timestamp)</label>
+                <input type="time" id="endTime" required>
+            </div>
+
+            <!-- เลข Call สาขาสุดท้าย -->
+            <div class="form-group">
+                <label for="callNo">เลข Call สาขาสุดท้าย</label>
+                <input type="text" id="callNo" placeholder="เช่น C20261012..." required>
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">บันทึกข้อมูล OT</button>
+        </form>
+        <div id="status"></div>
+    </div>
+
+    <!-- ตารางประวัติ -->
+    <div class="history-card">
+        <h3>📊 ประวัติการบันทึก OT</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>วันที่เลิก</th>
+                    <th>ชื่อ</th>
+                    <th>ทีม</th>
+                    <th>เวลา</th>
+                    <th>Call</th>
+                    <th>รูปภาพ</th>
+                </tr>
+            </thead>
+            <tbody id="historyTableBody">
+                <tr><td colspan="6" style="color: var(--text-muted);">กำลังโหลดข้อมูล...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+    // ⚠️ Web App URL ของคุณ
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxpm4Zl4nLSzaPeUJgyzBQKy4wTFru27rxjwLQHQtjyCHkaIBIh3_vFRWWjQNZY-78tOw/exec';
+
+    const workDateInput = document.getElementById('workDate');
+    const fullNameInput = document.getElementById('fullName');
+    const teamSelect = document.getElementById('team');
+    const endTimeInput = document.getElementById('endTime');
+    const callNoInput = document.getElementById('callNo');
+    
+    const startCamBtn = document.getElementById('startCamBtn');
+    const uploadFile = document.getElementById('uploadFile');
+    const video = document.getElementById('video');
+    const captureBtn = document.getElementById('captureBtn');
+    const canvas = document.getElementById('canvas');
+    const previewImg = document.getElementById('previewImg');
+
+    const form = document.getElementById('otForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const statusDiv = document.getElementById('status');
+    const historyTableBody = document.getElementById('historyTableBody');
+
+    let finalImageBase64 = "";
+    let mediaStream = null;
+
+    // ตั้งค่าเริ่มต้นวันที่เป็นวันปัจจุบัน
+    const todayStr = new Date().toISOString().split('T')[0];
+    workDateInput.value = todayStr;
+
+    // โหลดข้อมูลชื่อและทีมเดิมจาก LocalStorage (ถ้ามี)
+    if (localStorage.getItem('ot_fullname')) fullNameInput.value = localStorage.getItem('ot_fullname');
+    if (localStorage.getItem('ot_team')) teamSelect.value = localStorage.getItem('ot_team');
+
+    // เปิดกล้องสด
+    startCamBtn.addEventListener('click', async () => {
+        try {
+            mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+            video.srcObject = mediaStream;
+            video.style.display = 'block';
+            captureBtn.style.display = 'block';
+            previewImg.style.display = 'none';
+        } catch (err) {
+            alert('ไม่สามารถเปิดกล้องได้ กรุณาใช้ปุ่มอัปโหลดรูปภาพแทน');
+        }
+    });
+
+    // กดถ่ายภาพจากกล้องสด พร้อมประทับ Timestamp บนภาพ
+    captureBtn.addEventListener('click', () => {
+        const context = canvas.getContext('2d');
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+
+        context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+        const now = new Date();
+        const timeString = now.toLocaleDateString('th-TH', { dateStyle: 'medium' }) + ' ' + now.toLocaleTimeString('th-TH', { timeStyle: 'medium' });
+        
+        context.fillStyle = "rgba(0, 0, 0, 0.6)";
+        context.fillRect(10, canvas.height - 50, canvas.width - 20, 40);
+        
+        context.fillStyle = "#ffffff";
+        context.font = "16px Prompt, sans-serif";
+        context.fillText("📍 เวลา OT: " + timeString, 20, canvas.height - 25);
+
+        finalImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
+        previewImg.src = finalImageBase64;
+        previewImg.style.display = 'block';
+
+        mediaStream.getTracks().forEach(track => track.stop());
+        video.style.display = 'none';
+        captureBtn.style.display = 'none';
+
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        endTimeInput.value = `${hours}:${minutes}`;
+    });
+
+    // อัปโหลดรูปภาพจากไฟล์เครื่อง
+    uploadFile.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+
+                    const now = new Date();
+                    const timeString = now.toLocaleDateString('th-TH', { dateStyle: 'medium' }) + ' ' + now.toLocaleTimeString('th-TH', { timeStyle: 'medium' });
+                    
+                    ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
+                    ctx.fillRect(10, canvas.height - 50, canvas.width - 20, 40);
+                    ctx.fillStyle = "#ffffff";
+                    ctx.font = "18px Prompt, sans-serif";
+                    ctx.fillText("📍 เวลา OT: " + timeString, 20, canvas.height - 25);
+
+                    finalImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                    previewImg.src = finalImageBase64;
+                    previewImg.style.display = 'block';
+
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    endTimeInput.value = `${hours}:${minutes}`;
+                }
+                img.src = event.target.result;
+            }
+            reader.readAsDataURL(file);
+        }
+    });
+
+    // ดึงประวัติ OT มาแสดงตารางแบบปกติ (แก้ปัญหาตัวเลขวันที่เพี้ยน)
+    function loadHistory() {
+        fetch(WEB_APP_URL)
+        .then(res => res.json())
+        .then(data => {
+            historyTableBody.innerHTML = '';
+            if (data.length > 1) {
+                for (let i = data.length - 1; i >= 1; i--) {
+                    let row = data[i];
+                    
+                    // จัดการแปลงวันที่ให้อ่านง่าย
+                    let workDateFormatted = row[1] ? new Date(row[1]).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
+
+                    let tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td>${workDateFormatted}</td>
+                        <td>${row[2] || '-'}</td>
+                        <td>${row[3] || '-'}</td>
+                        <td><b>${row[4] || '-'}</b></td>
+                        <td>${row[5] || '-'}</td>
+                        <td>${row[6] ? `<a href="${row[6]}" target="_blank" style="color:var(--primary); font-weight:500;">ดูรูป</a>` : '-'}</td>
+                    `;
+                    historyTableBody.appendChild(tr);
+                }
+            } else {
+                historyTableBody.innerHTML = `<tr><td colspan="6" style="color:var(--text-muted);">ยังไม่มีประวัติ OT</td></tr>`;
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            historyTableBody.innerHTML = `<tr><td colspan="6" style="color:#b25353;">โหลดประวัติไม่สำเร็จ</td></tr>`;
+        });
+    }
+
+    loadHistory();
+
+    // กดส่งฟอร์มบันทึกข้อมูล
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        if (!finalImageBase64) {
+            alert('กรุณาถ่ายรูปหรืออัปโหลดรูป Time Stamp หน้าสาขาก่อนบันทึก');
+            return;
+        }
+
+        submitBtn.disabled = true;
+        submitBtn.innerText = 'กำลังบันทึกข้อมูล...';
+        statusDiv.style.color = 'var(--text-muted)';
+        statusDiv.innerText = 'กำลังส่งข้อมูลเข้า Google Sheet...';
+
+        localStorage.setItem('ot_fullname', fullNameInput.value);
+        localStorage.setItem('ot_team', teamSelect.value);
+
+        const payload = {
+            workDate: workDateInput.value,
+            fullName: fullNameInput.value,
+            team: teamSelect.value,
+            endTime: endTimeInput.value,
+            callNo: callNoInput.value,
+            imageBase64: finalImageBase64
+        };
+
+        fetch(WEB_APP_URL, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        })
+        .then(() => {
+            statusDiv.style.color = '#5a8a62';
+            statusDiv.innerText = '✨ บันทึกเวลา OT สำเร็จเรียบร้อย!';
+            form.reset();
+            previewImg.style.display = 'none';
+            finalImageBase64 = "";
+            workDateInput.value = todayStr;
+            
+            if (localStorage.getItem('ot_fullname')) fullNameInput.value = localStorage.getItem('ot_fullname');
+            if (localStorage.getItem('ot_team')) teamSelect.value = localStorage.getItem('ot_team');
+
+            setTimeout(loadHistory, 2000);
+        })
+        .catch(err => {
+            statusDiv.style.color = '#b25353';
+            statusDiv.innerText = '❌ เกิดข้อผิดพลาดในการบันทึก';
+        })
+        .finally(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerText = 'บันทึกข้อมูล OT';
+        });
+    });
+</script>
+
+</body>
+</html>
