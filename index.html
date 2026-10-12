@@ -2,7 +2,7 @@
 <html lang="th">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>บันทึกเวลาเลิกงาน OT - ศูนย์ลพบุรี</title>
     <!-- Google Font: Prompt -->
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -19,6 +19,18 @@
             --border-color: #e3ded5;
         }
 
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+        }
+
         body {
             font-family: 'Prompt', sans-serif;
             background-color: var(--bg-color);
@@ -27,163 +39,220 @@
             justify-content: center;
             align-items: flex-start;
             min-height: 100vh;
-            margin: 0;
-            padding: 20px 15px;
-            box-sizing: border-box;
+            padding: 12px;
         }
 
         .container {
             width: 100%;
-            max-width: 520px;
+            max-width: 480px;
+            margin: 0 auto;
         }
 
         .card {
             background: var(--card-bg);
-            padding: 30px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(141, 123, 104, 0.08);
-            margin-bottom: 25px;
+            padding: 20px 16px;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(141, 123, 104, 0.08);
+            margin-bottom: 16px;
             border: 1px solid rgba(227, 222, 213, 0.6);
-        }
-
-        h2, h3 {
-            text-align: center;
-            color: var(--text-main);
-            font-weight: 600;
-            margin-top: 0;
+            width: 100%;
         }
 
         h2 {
-            font-size: 22px;
-            margin-bottom: 20px;
+            text-align: center;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 19px;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+
+        h3 {
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .form-group {
-            margin-bottom: 18px;
+            margin-bottom: 14px;
         }
 
         label {
             display: block;
-            margin-bottom: 6px;
+            margin-bottom: 5px;
             color: var(--text-main);
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13.5px;
         }
 
         input, select {
             width: 100%;
-            padding: 12px 14px;
+            height: 46px;
+            padding: 10px 12px;
             background-color: var(--input-bg);
             border: 1px solid var(--border-color);
-            border-radius: 12px;
-            box-sizing: border-box;
+            border-radius: 10px;
             font-size: 15px;
             font-family: 'Prompt', sans-serif;
             color: var(--text-main);
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            -webkit-appearance: none;
         }
 
         input:focus, select:focus {
             outline: none;
             border-color: var(--primary);
             background-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(141, 123, 104, 0.1);
+            box-shadow: 0 0 0 3px rgba(141, 123, 104, 0.12);
         }
 
         .camera-box {
             background: var(--input-bg);
-            border: 2px dashed var(--border-color);
+            border: 1.5px dashed var(--border-color);
             border-radius: 12px;
-            padding: 15px;
+            padding: 12px;
             text-align: center;
-            margin-top: 5px;
+        }
+
+        .btn-group-cam {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+
+        .btn-camera {
+            flex: 1;
+            background-color: var(--accent);
+            color: var(--text-main);
+            border: none;
+            height: 42px;
+            padding: 0 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            font-family: 'Prompt', sans-serif;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .btn-camera:active {
+            background-color: var(--primary);
+            color: white;
         }
 
         video, canvas, img.preview {
             width: 100%;
-            max-height: 300px;
+            max-height: 250px;
             object-fit: cover;
             border-radius: 8px;
             margin-top: 10px;
             display: none;
         }
 
-        .btn-camera {
-            background-color: var(--accent);
-            color: var(--text-main);
-            border: none;
-            padding: 10px 15px;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: 500;
-            font-family: 'Prompt', sans-serif;
-            margin: 5px 2px;
-            font-size: 14px;
-            transition: 0.2s;
-        }
-
-        .btn-camera:hover {
-            background-color: var(--primary);
-            color: white;
-        }
-
         button.submit-btn {
             width: 100%;
-            padding: 14px;
+            height: 48px;
             background-color: var(--primary);
             color: white;
             border: none;
             border-radius: 12px;
             font-size: 16px;
-            font-weight: 500;
+            font-weight: 600;
             font-family: 'Prompt', sans-serif;
             cursor: pointer;
-            transition: all 0.3s ease;
+            margin-top: 8px;
             box-shadow: 0 4px 12px rgba(141, 123, 104, 0.2);
-            margin-top: 10px;
         }
 
-        button.submit-btn:hover {
+        button.submit-btn:active {
             background-color: var(--primary-hover);
         }
 
         #status {
             text-align: center;
-            margin-top: 15px;
+            margin-top: 12px;
             font-weight: 500;
-            font-size: 14px;
+            font-size: 13.5px;
         }
 
-        /* ตารางประวัติ */
+        /* ประวัติการบันทึก - สไตล์การ์ดบนมือถือ */
         .history-card {
             background: var(--card-bg);
-            padding: 20px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(141, 123, 104, 0.08);
+            padding: 18px 14px;
+            border-radius: 18px;
+            box-shadow: 0 4px 20px rgba(141, 123, 104, 0.08);
             border: 1px solid rgba(227, 222, 213, 0.6);
-            overflow-x: auto;
-        }
-
-        table {
             width: 100%;
-            border-collapse: collapse;
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .history-item {
+            background-color: var(--input-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
             font-size: 13px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
         }
 
-        th, td {
-            padding: 10px 8px;
-            text-align: center;
-            white-space: nowrap;
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px dashed var(--border-color);
+            padding-bottom: 6px;
+            margin-bottom: 4px;
         }
 
-        th {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+        .history-date {
             font-weight: 600;
+            color: var(--text-main);
         }
 
-        tr:not(:last-child) td {
-            border-bottom: 1px solid var(--bg-color);
+        .history-time {
+            font-weight: 700;
+            color: var(--primary);
+            font-size: 15px;
+            background: #ffffff;
+            padding: 2px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+        }
+
+        .history-body {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-main);
+        }
+
+        .history-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        .history-link {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -191,18 +260,18 @@
 
 <div class="container">
     <div class="card">
-        <h2>⏱️ บันทึกเวลาเลิกงาน OT (ศูนย์ลพบุรี)</h2>
+        <h2>⏱️ บันทึกเวลาเลิกงาน OT<br><span style="font-size:14px; font-weight:400; color:var(--text-muted);">(ศูนย์ลพบุรี)</span></h2>
         <form id="otForm">
             <!-- วันที่เลิกดึก -->
             <div class="form-group">
                 <label for="workDate">วันที่เลิกดึก</label>
-                <input type="date" id="workDate" required>
+                <input type="date" id="workDate" lang="en-GB" required>
             </div>
 
             <!-- ชื่อ-นามสกุล -->
             <div class="form-group">
-                <label for="fullName">ชื่อ-นามสกุล (ไม่ต้องมีคำนำหน้า)</label>
-                <input type="text" id="fullName" placeholder="เช่น สมชาย ใจดี" required>
+                <label for="fullName">ชื่อ-นามสกุล</label>
+                <input type="text" id="fullName" placeholder="ไม่ต้องมีคำนำหน้า เช่น สมชาย ใจดี" required>
             </div>
 
             <!-- ทีม -->
@@ -224,26 +293,28 @@
                 </select>
             </div>
 
-            <!-- ถ่ายรูป Timestamp และเวลาเลิกงานอัตโนมัติ -->
+            <!-- ถ่ายรูป Timestamp -->
             <div class="form-group">
                 <label>รูปถ่ายเซลฟี่ Time Stamp หน้าสาขา</label>
                 <div class="camera-box">
-                    <button type="button" class="btn-camera" id="startCamBtn">📷 เปิดกล้องถ่ายทันที</button>
-                    <input type="file" id="uploadFile" accept="image/*" style="display: none;">
-                    <button type="button" class="btn-camera" onclick="document.getElementById('uploadFile').click()">📁 อัปโหลดรูปภาพ</button>
+                    <div class="btn-group-cam">
+                        <button type="button" class="btn-camera" id="startCamBtn">📷 กล้องสด</button>
+                        <input type="file" id="uploadFile" accept="image/*" style="display: none;">
+                        <button type="button" class="btn-camera" onclick="document.getElementById('uploadFile').click()">📁 อัปโหลดรูป</button>
+                    </div>
                     
                     <video id="video" autoplay playsinline></video>
-                    <button type="button" class="btn-camera" id="captureBtn" style="display:none; background-color: #8d7b68; color:white; width:100%; margin-top:10px;">📸 กดถ่ายภาพตอนนี้</button>
+                    <button type="button" class="btn-camera" id="captureBtn" style="display:none; background-color: var(--primary); color:white; width:100%; margin-top:10px; height:40px;">📸 กดถ่ายภาพตอนนี้</button>
                     
                     <canvas id="canvas"></canvas>
                     <img id="previewImg" class="preview" alt="Preview">
                 </div>
             </div>
 
-            <!-- เวลาเลิกงาน (ดึงอัตโนมัติหรือเลือกเอง) -->
+            <!-- เวลาเลิกงาน -->
             <div class="form-group">
-                <label for="endTime">เวลาเลิกงาน (ตามรูป Timestamp)</label>
-                <input type="time" id="endTime" required>
+                <label for="endTime">เวลาเลิกงาน (ระบบ 24 ช.ม.)</label>
+                <input type="time" id="endTime" step="60" required>
             </div>
 
             <!-- เลข Call สาขาสุดท้าย -->
@@ -257,30 +328,18 @@
         <div id="status"></div>
     </div>
 
-    <!-- ตารางประวัติ -->
+    <!-- ประวัติการบันทึก -->
     <div class="history-card">
         <h3>📊 ประวัติการบันทึก OT</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>วันที่เลิก</th>
-                    <th>ชื่อ</th>
-                    <th>ทีม</th>
-                    <th>เวลา</th>
-                    <th>Call</th>
-                    <th>รูปภาพ</th>
-                </tr>
-            </thead>
-            <tbody id="historyTableBody">
-                <tr><td colspan="6" style="color: var(--text-muted);">กำลังโหลดข้อมูล...</td></tr>
-            </tbody>
-        </table>
+        <div id="historyList" class="history-list">
+            <div style="text-align:center; color: var(--text-muted); padding: 15px; font-size:13px;">กำลังโหลดข้อมูล...</div>
+        </div>
     </div>
 </div>
 
 <script>
     // ⚠️ Web App URL ของคุณ
-    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxpm4Zl4nLSzaPeUJgyzBQKy4wTFru27rxjwLQHQtjyCHkaIBIh3_vFRWWjQNZY-78tOw/exec';
+    const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxj7ekHGoaYZfYbgYD9knH2a59buXmG3P-lVl7fF-rWk1-AhxgJ6alBava9mM8Sqcrv/exec';
 
     const workDateInput = document.getElementById('workDate');
     const fullNameInput = document.getElementById('fullName');
@@ -298,7 +357,7 @@
     const form = document.getElementById('otForm');
     const submitBtn = document.getElementById('submitBtn');
     const statusDiv = document.getElementById('status');
-    const historyTableBody = document.getElementById('historyTableBody');
+    const historyList = document.getElementById('historyList');
 
     let finalImageBase64 = "";
     let mediaStream = null;
@@ -310,6 +369,33 @@
     // โหลดข้อมูลชื่อและทีมเดิมจาก LocalStorage (ถ้ามี)
     if (localStorage.getItem('ot_fullname')) fullNameInput.value = localStorage.getItem('ot_fullname');
     if (localStorage.getItem('ot_team')) teamSelect.value = localStorage.getItem('ot_team');
+
+    // ฟังก์ชันช่วยจัดรูปแบบเวลาให้ออกมาเป็น HH:mm เสมอ
+    function formatTimeDisplay(val) {
+        if (!val) return '-';
+        let str = String(val).trim();
+        
+        if (str.includes('T') && str.includes('Z')) {
+            try {
+                let d = new Date(str);
+                let hours = String(d.getUTCHours()).padStart(2, '0');
+                let mins = String(d.getUTCMinutes()).padStart(2, '0');
+                return `${hours}:${mins}`;
+            } catch (e) {}
+        }
+
+        if (str.length >= 5 && str.includes(':')) {
+            return str.substring(0, 5);
+        }
+        
+        if (str.length === 4) {
+            return `${str.substring(0, 2)}:${str.substring(2, 4)}`;
+        } else if (str.length === 3) {
+            return `0${str.substring(0, 1)}:${str.substring(1, 3)}`;
+        }
+        
+        return val;
+    }
 
     // เปิดกล้องสด
     startCamBtn.addEventListener('click', async () => {
@@ -333,7 +419,7 @@
         context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
         const now = new Date();
-        const timeString = now.toLocaleDateString('th-TH', { dateStyle: 'medium' }) + ' ' + now.toLocaleTimeString('th-TH', { timeStyle: 'medium' });
+        const timeString = now.toLocaleDateString('th-TH', { dateStyle: 'medium' }) + ' ' + now.toLocaleTimeString('th-TH', { timeStyle: 'medium', hour12: false });
         
         context.fillStyle = "rgba(0, 0, 0, 0.6)";
         context.fillRect(10, canvas.height - 50, canvas.width - 20, 40);
@@ -349,10 +435,6 @@
         mediaStream.getTracks().forEach(track => track.stop());
         video.style.display = 'none';
         captureBtn.style.display = 'none';
-
-        const hours = String(now.getHours()).padStart(2, '0');
-        const minutes = String(now.getMinutes()).padStart(2, '0');
-        endTimeInput.value = `${hours}:${minutes}`;
     });
 
     // อัปโหลดรูปภาพจากไฟล์เครื่อง
@@ -369,7 +451,7 @@
                     ctx.drawImage(img, 0, 0);
 
                     const now = new Date();
-                    const timeString = now.toLocaleDateString('th-TH', { dateStyle: 'medium' }) + ' ' + now.toLocaleTimeString('th-TH', { timeStyle: 'medium' });
+                    const timeString = now.toLocaleDateString('th-TH', { dateStyle: 'medium' }) + ' ' + now.toLocaleTimeString('th-TH', { timeStyle: 'medium', hour12: false });
                     
                     ctx.fillStyle = "rgba(0, 0, 0, 0.6)";
                     ctx.fillRect(10, canvas.height - 50, canvas.width - 20, 40);
@@ -380,10 +462,6 @@
                     finalImageBase64 = canvas.toDataURL('image/jpeg', 0.8);
                     previewImg.src = finalImageBase64;
                     previewImg.style.display = 'block';
-
-                    const hours = String(now.getHours()).padStart(2, '0');
-                    const minutes = String(now.getMinutes()).padStart(2, '0');
-                    endTimeInput.value = `${hours}:${minutes}`;
                 }
                 img.src = event.target.result;
             }
@@ -391,37 +469,44 @@
         }
     });
 
-    // ดึงประวัติ OT มาแสดงตารางแบบปกติ (แก้ปัญหาตัวเลขวันที่เพี้ยน)
+    // ดึงประวัติ OT มาแสดงการ์ดประวัติย้อนหลัง (ดึงข้อมูล Col E จาก index 4 มาแสดงตรงเวลา)
     function loadHistory() {
         fetch(WEB_APP_URL)
         .then(res => res.json())
         .then(data => {
-            historyTableBody.innerHTML = '';
+            historyList.innerHTML = '';
             if (data.length > 1) {
                 for (let i = data.length - 1; i >= 1; i--) {
                     let row = data[i];
                     
-                    // จัดการแปลงวันที่ให้อ่านง่าย
                     let workDateFormatted = row[1] ? new Date(row[1]).toLocaleDateString('th-TH', { year: 'numeric', month: 'short', day: 'numeric' }) : '-';
+                    let formattedTime = formatTimeDisplay(row[4]); // Col E คือ index 4
 
-                    let tr = document.createElement('tr');
-                    tr.innerHTML = `
-                        <td>${workDateFormatted}</td>
-                        <td>${row[2] || '-'}</td>
-                        <td>${row[3] || '-'}</td>
-                        <td><b>${row[4] || '-'}</b></td>
-                        <td>${row[5] || '-'}</td>
-                        <td>${row[6] ? `<a href="${row[6]}" target="_blank" style="color:var(--primary); font-weight:500;">ดูรูป</a>` : '-'}</td>
+                    let itemDiv = document.createElement('div');
+                    itemDiv.className = 'history-item';
+                    itemDiv.innerHTML = `
+                        <div class="history-header">
+                            <span class="history-date">📅 ${workDateFormatted}</span>
+                            <span class="history-time">⏱️ ${formattedTime}</span>
+                        </div>
+                        <div class="history-body">
+                            <span>👤 <b>${row[2] || '-'}</b></span>
+                            <span style="color:var(--text-muted); font-size:12px;">${row[3] || '-'}</span>
+                        </div>
+                        <div class="history-footer">
+                            <span>📞 Call: ${row[5] || '-'}</span>
+                            ${row[6] ? `<a href="${row[6]}" target="_blank" class="history-link">🖼️ ดูรูปภาพ</a>` : ''}
+                        </div>
                     `;
-                    historyTableBody.appendChild(tr);
+                    historyList.appendChild(itemDiv);
                 }
             } else {
-                historyTableBody.innerHTML = `<tr><td colspan="6" style="color:var(--text-muted);">ยังไม่มีประวัติ OT</td></tr>`;
+                historyList.innerHTML = `<div style="text-align:center; color: var(--text-muted); padding: 15px; font-size:13px;">ยังไม่มีประวัติ OT</div>`;
             }
         })
         .catch(err => {
             console.error(err);
-            historyTableBody.innerHTML = `<tr><td colspan="6" style="color:#b25353;">โหลดประวัติไม่สำเร็จ</td></tr>`;
+            historyList.innerHTML = `<div style="text-align:center; color: #b25353; padding: 15px; font-size:13px;">โหลดประวัติไม่สำเร็จ</div>`;
         });
     }
 
